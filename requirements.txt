@@ -1,0 +1,8 @@
+Pillow>=10.0
+unrar2-cffi>=0.8
+EbookLib>=0.18
+img2pdf>=0.5
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
+jinja2>=3.1
