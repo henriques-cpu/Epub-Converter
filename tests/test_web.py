@@ -55,6 +55,34 @@ def test_multipart_returns_zip():
     assert r.headers["x-page-count"] == "6"
 
 
+def test_preview_returns_processed_pages():
+    pages = {f"p{i:02d}.jpg": (1000, 1500) for i in range(10)}
+    pages["cover.jpg"] = (1000, 1500)
+    cbz = make_cbz(pages)
+    r = client.post(
+        "/api/preview",
+        files={"file": ("vol.cbz", cbz, "application/octet-stream")},
+        data={"device": "paperwhite", "right_to_left": "true"},
+    )
+    assert r.status_code == 200
+    body = r.json()
+    assert body["source_page_count"] == 11
+    assert body["shown"] == 6  # default preview limit
+    assert len(body["pages"]) == 6
+    # Cover-like page floats to the front of the preview.
+    assert body["pages"][0]["src"].startswith("data:image/jpeg;base64,")
+    assert body["right_to_left"] is True
+
+
+def test_preview_empty_upload_rejected():
+    r = client.post(
+        "/api/preview",
+        files={"file": ("x.cbz", b"", "application/octet-stream")},
+        data={"device": "paperwhite"},
+    )
+    assert r.status_code == 400
+
+
 def test_empty_upload_rejected():
     r = client.post(
         "/api/convert",

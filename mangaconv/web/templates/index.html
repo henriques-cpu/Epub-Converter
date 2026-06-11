@@ -57,8 +57,20 @@
         <label class="check"><input type="checkbox" name="split_spreads"/> Split double-page spreads</label>
       </fieldset>
 
-      <button type="submit" id="submit-btn" disabled>Convert</button>
+      <div class="actions">
+        <button type="button" id="preview-btn" class="secondary" disabled>Preview pages</button>
+        <button type="submit" id="submit-btn" disabled>Convert</button>
+      </div>
     </form>
+
+    <section id="preview" class="preview hidden">
+      <div class="preview-head">
+        <h2>Preview</h2>
+        <p id="preview-meta" class="hint"></p>
+      </div>
+      <p id="preview-hint" class="hint reading-hint"></p>
+      <div id="preview-grid" class="preview-grid"></div>
+    </section>
 
     <div id="status" class="status hidden"></div>
 

@@ -55,6 +55,29 @@ class ConversionResult:
         return len(self.parts)
 
 
+@dataclass
+class PreviewPage:
+    """One processed page returned for preview (image bytes + dimensions)."""
+
+    data: bytes
+    width: int
+    height: int
+    media_type: str
+    source_name: str
+
+
+@dataclass
+class PreviewResult:
+    """Outcome of a preview run: the first few processed pages plus metadata."""
+
+    pages: list[PreviewPage] = field(default_factory=list)
+    source_page_count: int = 0  # pages found in the archive (before spread split)
+    shown: int = 0
+    skipped: list[tuple[str, str]] = field(default_factory=list)
+    device: DeviceProfile | None = None
+    title: str = ""
+
+
 def _safe_title(opts: ConversionOptions, fallback: str) -> str:
     if opts.title:
         return opts.title
@@ -144,6 +167,68 @@ def convert(
             )
         )
 
+    return result
+
+
+def preview(
+    source: str | Path | bytes,
+    options: ConversionOptions | None = None,
+    *,
+    filename: str | None = None,
+    limit: int = 6,
+) -> PreviewResult:
+    """Process only the first ``limit`` pages so the user can sanity-check
+    reading order, orientation, grayscale and resolution before committing to a
+    full conversion. Much faster than :func:`convert` for large volumes.
+    """
+    opts = options or ConversionOptions()
+    device = get_device(opts.device)
+
+    if isinstance(source, (str, Path)):
+        filename = filename or Path(source).name
+    title = _safe_title(opts, filename or "Untitled")
+    grayscale = device.grayscale if opts.grayscale is None else opts.grayscale
+
+    report = extract_archive(source, filename=filename)
+    if not report.ok:
+        raise ValueError("No readable image pages found in the archive.")
+
+    ordered = order_pages(
+        report.pages, key=lambda p: p.name, separate_matter=opts.separate_matter
+    )
+
+    result = PreviewResult(
+        source_page_count=len(ordered),
+        skipped=list(report.skipped),
+        device=device,
+        title=title,
+    )
+
+    w, h = device.resolution
+    for page in ordered:
+        if len(result.pages) >= limit:
+            break
+        try:
+            for pp in process_page(
+                page.data, w, h,
+                grayscale=grayscale,
+                autocontrast=opts.autocontrast,
+                max_quality=opts.max_quality,
+                split_spreads=opts.split_spreads,
+                right_to_left=opts.right_to_left,
+            ):
+                result.pages.append(
+                    PreviewPage(pp.data, pp.width, pp.height, pp.media_type, page.name)
+                )
+                if len(result.pages) >= limit:
+                    break
+        except Exception as exc:  # bad image — skip, keep going
+            result.skipped.append((page.name, str(exc)))
+
+    if not result.pages:
+        raise ValueError("Could not render any preview pages.")
+
+    result.shown = len(result.pages)
     return result
 
 

@@ -116,7 +116,8 @@ mangaconv/
 - [x] Detecção de spreads (landscape) com opção de dividir em duas páginas.
 - [x] Batch de múltiplos volumes (CLI).
 - [ ] **Detecção automática de modelo** de Kindle a partir do contexto.
-- [ ] **Preview** das primeiras páginas antes de processar (web).
+- [x] **Preview** das primeiras páginas antes de processar (web) — endpoint
+      `/api/preview` + `core.preview()`, com miniaturas na ordem de leitura.
 - [ ] Detecção de spread baseada em conteúdo (não só aspect ratio/filename).
 - [ ] Upload em batch pela interface web com fila de progresso.
 - [ ] Perfis adicionais e ajuste fino de gamma por dispositivo.

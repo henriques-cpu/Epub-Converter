@@ -6,7 +6,14 @@ from .ordering import order_pages
 from .imageopt import process_page
 from .epubbuilder import build_fixed_layout_epub
 from .splitter import split_pages_by_size
-from .converter import ConversionOptions, ConversionResult, convert
+from .converter import (
+    ConversionOptions,
+    ConversionResult,
+    PreviewPage,
+    PreviewResult,
+    convert,
+    preview,
+)
 
 __all__ = [
     "DEVICE_PROFILES",
@@ -20,5 +27,8 @@ __all__ = [
     "split_pages_by_size",
     "ConversionOptions",
     "ConversionResult",
+    "PreviewPage",
+    "PreviewResult",
     "convert",
+    "preview",
 ]

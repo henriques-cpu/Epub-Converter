@@ -6,17 +6,20 @@ into multiple parts, the parts are bundled into a ZIP for download.
 
 from __future__ import annotations
 
+import base64
 import io
 import zipfile
 from pathlib import Path
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from ..core import DEVICE_PROFILES
-from ..core.converter import ConversionOptions, convert
+from ..core.converter import ConversionOptions, convert, preview
+
+PREVIEW_PAGE_LIMIT = 6
 
 BASE_DIR = Path(__file__).parent
 MAX_UPLOAD_BYTES = 500 * 1024 * 1024  # 500 MB upload ceiling
@@ -55,6 +58,66 @@ async def list_devices():
         }
         for k, p in DEVICE_PROFILES.items()
     }
+
+
+@app.post("/api/preview")
+async def api_preview(
+    file: UploadFile = File(...),
+    device: str = Form("paperwhite"),
+    right_to_left: bool = Form(True),
+    grayscale: bool = Form(True),
+    autocontrast: bool = Form(True),
+    split_spreads: bool = Form(False),
+    limit: int = Form(PREVIEW_PAGE_LIMIT),
+):
+    """Render the first few pages so the user can verify the result before
+    committing to a full conversion. Returns the images as base64 data URLs.
+    """
+    if device not in DEVICE_PROFILES:
+        raise HTTPException(400, f"Unknown device profile: {device}")
+
+    data = await file.read()
+    if not data:
+        raise HTTPException(400, "Empty upload.")
+    if len(data) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, "Upload exceeds the 500 MB limit.")
+
+    options = ConversionOptions(
+        device=device,
+        right_to_left=right_to_left,
+        grayscale=grayscale,
+        autocontrast=autocontrast,
+        split_spreads=split_spreads,
+        max_quality=75,  # lighter encoding is plenty for a thumbnail preview
+    )
+
+    try:
+        result = preview(data, options, filename=file.filename, limit=max(1, min(12, limit)))
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
+    except Exception as exc:  # pragma: no cover - surfaced to client
+        raise HTTPException(500, f"Preview failed: {exc}") from exc
+
+    pages = [
+        {
+            "index": i + 1,
+            "src": f"data:{p.media_type};base64,{base64.b64encode(p.data).decode()}",
+            "width": p.width,
+            "height": p.height,
+        }
+        for i, p in enumerate(result.pages)
+    ]
+    return JSONResponse(
+        {
+            "device": result.device.name if result.device else device,
+            "resolution": f"{result.device.width}×{result.device.height}" if result.device else "",
+            "source_page_count": result.source_page_count,
+            "shown": result.shown,
+            "right_to_left": right_to_left,
+            "skipped": [name for name, _ in result.skipped],
+            "pages": pages,
+        }
+    )
 
 
 @app.post("/api/convert")

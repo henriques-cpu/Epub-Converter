@@ -96,8 +96,9 @@ select:focus, input:focus { outline: none; border-color: var(--accent); }
   margin: .3rem 0;
 }
 
+.actions { display: flex; gap: .75rem; }
 button {
-  width: 100%;
+  flex: 1;
   background: var(--accent-2);
   color: #fff;
   border: none;
@@ -110,6 +111,43 @@ button {
 }
 button:hover:not(:disabled) { background: var(--accent); }
 button:disabled { opacity: .5; cursor: not-allowed; }
+button.secondary {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+button.secondary:hover:not(:disabled) { background: var(--panel-2); }
+
+.preview {
+  margin-top: 1.5rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+.preview-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+.preview-head h2 { margin: 0; font-size: 1.15rem; }
+.reading-hint { margin: .25rem 0 1rem; }
+.preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: .9rem;
+}
+.preview-grid.rtl { direction: rtl; }
+.thumb {
+  background: var(--panel-2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  direction: ltr;
+}
+.thumb img { width: 100%; height: auto; display: block; background: #fff; }
+.thumb .cap {
+  font-size: .75rem;
+  color: var(--muted);
+  text-align: center;
+  padding: .35rem;
+}
 
 .status {
   margin-top: 1.5rem;
