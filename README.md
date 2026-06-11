@@ -24,7 +24,16 @@ hard-won extraction/encoding details.
   **Kobo**, **reMarkable**, and generic tablets.
 - **Web app** (drag-and-drop upload) and a **CLI**.
 
-## Install
+## Two ways to use it
+
+- **Browser version (no install, no server)** — a fully client-side build in
+  [`docs/`](docs/). Files never leave your device; host it free on GitHub Pages.
+  See [docs/README.md](docs/README.md). This is the easiest way to just "open a
+  webpage and convert".
+- **Python version** — the FastAPI web app + CLI described below, for local or
+  self-hosted use.
+
+## Install (Python version)
 
 ```bash
 python -m venv .venv && source .venv/bin/activate

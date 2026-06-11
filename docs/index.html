@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>mangaconv — Manga to E-reader Converter</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <main class="container">
+    <header>
+      <h1>📚 mangaconv</h1>
+      <p class="tagline">Convert CBZ / CBR into Kindle-ready fixed-layout EPUBs.</p>
+      <p class="privacy">🔒 100% in your browser — your files never leave your device.</p>
+    </header>
+
+    <form id="convert-form">
+      <div class="drop-zone" id="drop-zone">
+        <input type="file" id="file" accept=".cbz,.cbr,.zip,.rar" hidden/>
+        <p id="drop-text">Drag a comic archive here, or <span class="link">browse</span></p>
+        <p class="hint">Supported: .cbz, .cbr, .zip, .rar</p>
+      </div>
+
+      <div class="grid">
+        <label>
+          Target device
+          <select name="device" id="device"></select>
+        </label>
+        <label>
+          Title (optional)
+          <input type="text" name="title" id="title" placeholder="From filename"/>
+        </label>
+        <label>
+          Output format
+          <select name="output_format" id="output_format">
+            <option value="epub">EPUB (fixed-layout, recommended)</option>
+          </select>
+        </label>
+        <label>
+          JPEG quality cap
+          <input type="number" name="max_quality" id="max_quality" min="40" max="95" value="90"/>
+        </label>
+      </div>
+
+      <fieldset class="toggles">
+        <legend>Options</legend>
+        <label class="check"><input type="checkbox" id="right_to_left" checked/> Right-to-left (manga)</label>
+        <label class="check"><input type="checkbox" id="grayscale" checked/> Grayscale (e-ink)</label>
+        <label class="check"><input type="checkbox" id="autocontrast" checked/> Auto-contrast</label>
+        <label class="check"><input type="checkbox" id="split_spreads"/> Split double-page spreads</label>
+      </fieldset>
+
+      <div class="actions">
+        <button type="button" id="preview-btn" class="secondary" disabled>Preview pages</button>
+        <button type="submit" id="submit-btn" disabled>Convert</button>
+      </div>
+    </form>
+
+    <section id="preview" class="preview hidden">
+      <div class="preview-head">
+        <h2>Preview</h2>
+        <p id="preview-meta" class="hint"></p>
+      </div>
+      <p id="preview-hint" class="hint reading-hint"></p>
+      <div id="preview-grid" class="preview-grid"></div>
+    </section>
+
+    <div id="status" class="status hidden"></div>
+
+    <footer>
+      <p>Optimized for crisp e-ink text: native-resolution rendering, grayscale,
+         auto-split to fit Send to Kindle's 50&nbsp;MB limit.</p>
+      <p class="hint">CBR support powered by libarchive.js (WebAssembly).</p>
+    </footer>
+  </main>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

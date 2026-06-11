@@ -85,8 +85,15 @@ Implementado em `mangaconv/core/epubbuilder.py`.
 
 ## Stack
 
-Python 3.11 · Pillow · `unrar2-cffi` · `zipfile` · `EbookLib` (validação) ·
-`img2pdf` (PDF opcional) · FastAPI + Uvicorn + Jinja2 (web).
+**Versão Python** (CLI + servidor): Python 3.11 · Pillow · `unrar2-cffi` ·
+`zipfile` · `EbookLib` (validação) · `img2pdf` (PDF opcional) · FastAPI +
+Uvicorn + Jinja2 (web).
+
+**Versão navegador** (`docs/`, 100% client-side, hospedável no GitHub Pages):
+JS/WASM · `fflate` (ZIP) · `libarchive.js` WASM (RAR/CBR) · Canvas API
+(processamento de imagem) · `fflate.zipSync` (EPUB). Sem servidor; os arquivos
+nunca saem do navegador. Mesma pipeline e mesmos requisitos de EPUB da versão
+Python.
 
 ## Arquitetura
 
