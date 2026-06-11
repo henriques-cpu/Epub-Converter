@@ -150,6 +150,16 @@ button.secondary:hover:not(:disabled) { background: var(--panel-2); }
   padding: .35rem;
 }
 
+.result-actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: .75rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.result-actions button { flex: 1 1 auto; min-width: 160px; }
+.result-actions .hint { flex-basis: 100%; margin: 0; }
+
 .status {
   margin-top: 1.5rem;
   padding: 1rem 1.25rem;

@@ -18,6 +18,22 @@ Same pipeline as the Python app, reimplemented in JavaScript/WASM:
 - **Fixed-layout EPUB 3** output (mimetype stored first, `pre-paginated`,
   per-page viewport), with auto-split into parts under the 50 MB limit.
 
+## Send to Kindle
+
+After converting, a **Send to Kindle** button appears. Because this is a static
+page with no backend, it can't email an `@kindle.com` address (that needs an
+approved sender + a mail server) and can't push a file into Amazon's site
+(different origin + your Amazon login). It does the two things a browser can:
+
+- **Mobile** (with file-sharing support): opens the OS share sheet so you can
+  pick the **Kindle app**. Note: some browsers don't yet allow sharing `.epub`
+  via the Web Share API ([w3c/web-share#284](https://github.com/w3c/web-share/issues/284)),
+  so the button falls back automatically.
+- **Desktop / fallback**: opens **Send to Kindle for Web**
+  (`amazon.com/sendtokindle`) in a new tab — sign in and drop the file your
+  browser just downloaded. The web uploader accepts files up to **200 MB**
+  (the 50 MB cap only applies to the email method).
+
 ## Run locally
 
 It's a static site, but ES modules + the WASM worker need to be served over
