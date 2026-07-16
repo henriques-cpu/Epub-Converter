@@ -1,0 +1,231 @@
+/**
+ * sidebar.css
+ * ---------------------------------------------------------------------------
+ * Styling for the injected procedure-detector sidebar. Colours and fonts are
+ * chosen to sit comfortably next to Zendesk's Garden design system.
+ * ---------------------------------------------------------------------------
+ */
+
+#zpd-sidebar {
+  --zpd-accent: #1f73b7;
+  --zpd-bg: #ffffff;
+  --zpd-border: #d8dcde;
+  --zpd-text: #2f3941;
+  --zpd-muted: #68737d;
+
+  position: fixed;
+  top: 64px;
+  right: 16px;
+  width: 300px;
+  max-height: calc(100vh - 96px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  background: var(--zpd-bg);
+  color: var(--zpd-text);
+  border: 1px solid var(--zpd-border);
+  border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(47, 57, 65, 0.18);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+    "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+  z-index: 2147483000;
+}
+
+/* ---- Header ------------------------------------------------------------ */
+#zpd-sidebar .zpd-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: var(--zpd-accent);
+  color: #fff;
+}
+#zpd-sidebar .zpd-title {
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+}
+#zpd-sidebar .zpd-collapse-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+#zpd-sidebar .zpd-collapse-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ---- Collapsed state --------------------------------------------------- */
+#zpd-sidebar.zpd-collapsed .zpd-body {
+  display: none;
+}
+
+/* ---- Body -------------------------------------------------------------- */
+#zpd-sidebar .zpd-body {
+  padding: 12px;
+  overflow-y: auto;
+}
+
+#zpd-sidebar .zpd-procedure-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+#zpd-sidebar .zpd-procedure-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--zpd-accent);
+}
+#zpd-sidebar .zpd-badge {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+#zpd-sidebar .zpd-badge-auto {
+  background: #e3f1e0;
+  color: #2e7d32;
+}
+#zpd-sidebar .zpd-badge-manual {
+  background: #fdeede;
+  color: #ad5f18;
+}
+
+/* ---- Matched keywords -------------------------------------------------- */
+#zpd-sidebar .zpd-keywords {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 10px;
+}
+#zpd-sidebar .zpd-keywords-label {
+  color: var(--zpd-muted);
+  font-size: 11px;
+  margin-right: 2px;
+}
+#zpd-sidebar .zpd-chip {
+  background: #fff4d6;
+  color: #8a6d0b;
+  border: 1px solid #f2df9b;
+  border-radius: 10px;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ---- Progress ---------------------------------------------------------- */
+#zpd-sidebar .zpd-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+#zpd-sidebar .zpd-progress-track {
+  flex: 1;
+  height: 8px;
+  background: #e9ebed;
+  border-radius: 4px;
+  overflow: hidden;
+}
+#zpd-sidebar .zpd-progress-fill {
+  height: 100%;
+  background: var(--zpd-accent);
+  transition: width 0.25s ease;
+}
+#zpd-sidebar .zpd-progress-label {
+  font-size: 11px;
+  color: var(--zpd-muted);
+  white-space: nowrap;
+}
+
+/* ---- Steps ------------------------------------------------------------- */
+#zpd-sidebar .zpd-steps {
+  list-style: none;
+  margin: 0 0 12px 0;
+  padding: 0;
+}
+#zpd-sidebar .zpd-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 6px;
+  border-radius: 6px;
+}
+#zpd-sidebar .zpd-step:hover {
+  background: #f4f6f7;
+}
+#zpd-sidebar .zpd-checkbox {
+  margin: 2px 0 0 0;
+  width: 15px;
+  height: 15px;
+  accent-color: var(--zpd-accent);
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+#zpd-sidebar .zpd-step-label {
+  cursor: pointer;
+  user-select: none;
+}
+#zpd-sidebar .zpd-step-done .zpd-step-label {
+  color: var(--zpd-muted);
+  text-decoration: line-through;
+}
+
+/* ---- Empty state ------------------------------------------------------- */
+#zpd-sidebar .zpd-empty p {
+  margin: 0 0 6px 0;
+}
+#zpd-sidebar .zpd-hint {
+  color: var(--zpd-muted);
+  font-size: 12px;
+}
+
+/* ---- Override controls ------------------------------------------------- */
+#zpd-sidebar .zpd-override {
+  border-top: 1px solid var(--zpd-border);
+  padding-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+#zpd-sidebar .zpd-override-label {
+  width: 100%;
+  color: var(--zpd-muted);
+  font-size: 11px;
+}
+#zpd-sidebar .zpd-select {
+  flex: 1;
+  min-width: 130px;
+  padding: 5px 6px;
+  border: 1px solid var(--zpd-border);
+  border-radius: 5px;
+  background: #fff;
+  color: var(--zpd-text);
+  font-size: 12px;
+}
+#zpd-sidebar .zpd-reset-btn {
+  padding: 5px 10px;
+  border: 1px solid var(--zpd-border);
+  border-radius: 5px;
+  background: #f4f6f7;
+  color: var(--zpd-text);
+  font-size: 12px;
+  cursor: pointer;
+}
+#zpd-sidebar .zpd-reset-btn:hover {
+  background: #e9ebed;
+}
