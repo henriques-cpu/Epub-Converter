@@ -156,6 +156,15 @@
   // Detection run
   // -------------------------------------------------------------------------
   async function runDetection() {
+    try {
+      await runDetectionInner();
+    } catch (e) {
+      // Never let a single failed scan kill the sidebar or the observers.
+      console.warn("[Procedure Detector] scan failed:", e);
+    }
+  }
+
+  async function runDetectionInner() {
     const ticketId = getTicketIdFromUrl();
 
     // Switched tickets -> reset in-memory state and reload from storage.
@@ -437,7 +446,15 @@
   // Init
   // -------------------------------------------------------------------------
   function init() {
-    if (!PROCEDURES.length) return;
+    if (!PROCEDURES.length) {
+      console.warn(
+        "[Procedure Detector] No procedures loaded — procedures.js did not run."
+      );
+      return;
+    }
+    console.info(
+      `[Procedure Detector] active with ${PROCEDURES.length} procedure(s).`
+    );
     hookHistory();
     observeMutations();
     // Initial pass (retry a couple of times while the app boots).

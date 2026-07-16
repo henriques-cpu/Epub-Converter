@@ -16,19 +16,12 @@
     return new Promise((resolve) => chrome.storage.local.set(obj, () => resolve()));
   }
 
-  // Load the procedures config from the extension bundle.
-  async function loadProcedures() {
-    try {
-      const url = chrome.runtime.getURL("procedures.js");
-      const text = await fetch(url).then((r) => r.text());
-      // Evaluate in a scoped function exposing a fake window/root.
-      const root = {};
-      // eslint-disable-next-line no-new-func
-      new Function("window", "module", text)(root, {});
-      return root.ZPD_PROCEDURES || [];
-    } catch (e) {
-      return [];
-    }
+  // procedures.js is loaded via a <script> tag in popup.html (see the tag just
+  // before this file). It runs under the extension page's CSP and exposes the
+  // config on window.ZPD_PROCEDURES. Loading it with fetch()+new Function() is
+  // NOT possible here: MV3's default extension-page CSP forbids eval/Function.
+  function loadProcedures() {
+    return window.ZPD_PROCEDURES || [];
   }
 
   function renderProcedures(procs) {
@@ -100,8 +93,8 @@
     renderLog();
   });
 
-  (async function init() {
-    renderProcedures(await loadProcedures());
+  (function init() {
+    renderProcedures(loadProcedures());
     renderLog();
   })();
 })();
