@@ -1,29 +1,17 @@
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-.eggs/
-build/
+# Dependencies
+node_modules/
+
+# Build / packaging
+*.zip
 dist/
-
-# Virtual envs
-.venv/
-venv/
-env/
-
-# Test / coverage
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Conversion output
-output/
-*.epub
-*.cbz
-*.cbr
+build/
 
 # OS / editor
 .DS_Store
 *.swp
 .idea/
 .vscode/
+
+# Logs
+*.log
+npm-debug.log*
