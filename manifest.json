@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Zendesk Procedure Auto-Detector",
+  "version": "1.0.0",
+  "description": "Detects the procedure type of a Zendesk ticket from its content and shows a persistent step checklist sidebar.",
+  "permissions": ["storage"],
+  "host_permissions": [
+    "https://*.zendesk.com/*"
+  ],
+  "action": {
+    "default_title": "Zendesk Procedure Auto-Detector",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.zendesk.com/*"],
+      "js": ["procedures.js", "detector.js", "content.js"],
+      "css": ["sidebar.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["procedures.js"],
+      "matches": ["https://*.zendesk.com/*"]
+    }
+  ]
+}

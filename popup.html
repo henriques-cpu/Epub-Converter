@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Procedure Detector</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <header class="p-header">
+      <h1>Procedure Detector</h1>
+    </header>
+
+    <main class="p-main">
+      <section class="p-section">
+        <h2>Configured procedures</h2>
+        <ul id="proc-list" class="p-proc-list"></ul>
+      </section>
+
+      <section class="p-section">
+        <div class="p-section-head">
+          <h2>Completed today</h2>
+          <button id="clear-log" class="p-link">Clear log</button>
+        </div>
+        <p id="log-summary" class="p-muted">Loading…</p>
+        <ul id="log-list" class="p-log-list"></ul>
+      </section>
+
+      <section class="p-section p-tip">
+        <p>
+          Open a Zendesk ticket to see the checklist sidebar. Edit
+          <code>procedures.js</code> to change procedures.
+        </p>
+      </section>
+    </main>
+
+    <script src="popup.js"></script>
+  </body>
+</html>
